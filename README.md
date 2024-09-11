@@ -40,7 +40,7 @@ Após o fim da geração, a população será totalmente substituida através da
 
 Cada cruzamento irá gerar 2 filhos. Para cada cruzamento é gerado uma máscara aleatória de 3 dígitos binários referentes aos 3 neurônios de camada 1. Caso a máscara seja 0, o 1º filho irá herdar o neurônio equivalente do 1º pai e o 2º filho irá herdar o neurônio do 2º. Caso a máscara seja 1, ocorre o inverso.
 
-![1726092236918](image/README/1726092236918.png)
+![1726092610552](image/README/1726092610552.png)
 
 ## Mutação
 
