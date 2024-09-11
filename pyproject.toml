@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "dino_neuron"
+version = "0.1.0"
+description = ""
+authors = ["Rafael Santos <rafaelsantos32141@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.10.11"
+pygame = "^2.6.0"
+numpy = "^2.1.1"
+
+[tool.poetry.scripts]
+train = "dino_neuron.trainning:start"
+play = "dino_neuron.play:start"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
