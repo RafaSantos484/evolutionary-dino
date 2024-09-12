@@ -21,9 +21,11 @@ class DinoNeuron:
         if dino.is_dead:
             return ACTION_DOWN
 
+        # inputs = np.array([inputs[0]/WIDTH, (inputs[1]-(HEIGHT-dino.rect.centery + dino.rect.height/2))/HEIGHT, 1 if dino.is_jumping else 0])
         inputs = np.array(
             [inputs[0]/WIDTH, (inputs[1]-dino.rect.height)/HEIGHT, 1 if dino.is_jumping else 0])
-        # print(inputs)
+        # if dino.score > 100:
+        #   print(inputs)
         # print()
 
         up_neuron_sum = np.dot(self.up_neuron_weights,

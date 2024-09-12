@@ -13,15 +13,15 @@ Os parâmetros de treinamento podem ser alterados no arquivo `trainning_params.p
 ## Exemplo de Arquivo `trainning_params.py`
 
 ```python
-dino_count = 100
+dino_count = 300
 num_gens = 1000
 crossover_rate = 0.6
 mutation_rate = 0.2
 
 min_weight = 0
-max_weight = 100
-min_bias = 0
-max_bias = 0
+max_weight = 10
+min_bias = -1
+max_bias = 1
 num_inputs = 3
 ```
 
@@ -72,12 +72,13 @@ Sempre que o código encontrar um indivíduo que bateu o recorde do jogo de trei
 ### Exemplo de Arquivo `dino_params.txt`
 
 ```
-[-62.66790534  48.86149078 910.52107584 240.71002869]
-0.0
-[  49.52758356 -837.31437462 -965.40726429 -210.88173148]
-0.0
-[-442.75095397  844.91300621  239.28579997  101.56386528]
-0.0
+[2.98350607 2.11769848 7.13659417]
+-0.39448118138819743
+[6.63418138 2.52645824 0.75304239]
+-0.43207310735713267
+[0.83442417 8.40866032 4.36345151]
+-0.6679732398869809
+
 ```
 
 ## Jogando com Melhor Indivíduo

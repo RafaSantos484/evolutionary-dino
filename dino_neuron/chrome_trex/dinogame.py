@@ -433,10 +433,10 @@ class MultiDinoGame:
 
         def get_coords(sprites, min_size):
             # cs = [((s.rect.centerx-self.player_dinos[0].rect.centerx)/w, s.rect.centery/h, s.rect.height/h)
-            cs = [((s.rect.centerx-self.alive_players[0].rect.centerx)/self.gamespeed, (h-s.rect.y))
+            cs = [((s.rect.centerx-self.alive_players[0].rect.centerx)/self.gamespeed, (h-s.rect.centery))
                   for s in sprites
                   # if s.rect.centerx > self.alive_players[0].rect.centerx]
-                  if s.rect.centerx + s.rect.width/2 > self.alive_players[0].rect.centerx]
+                  if s.rect.centerx + s.rect.width/2 + 10 > self.alive_players[0].rect.centerx]
             return cs + [(float('inf'), 0)]*(min_size-len(cs))
 
         coords = get_coords(self.cacti, 2) + get_coords(self.pteras, 1)

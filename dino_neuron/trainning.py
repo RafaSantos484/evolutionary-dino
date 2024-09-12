@@ -15,16 +15,6 @@ def roulette_selection(population: list[DinoNeuron], fitnesses: list[float]):
     return population[selected_individuals]
 
 
-def tournment_selection(population: list[DinoNeuron], fitnesses: list[float], tournment_size=5):
-    selected_individuals = []
-    for _ in range(len(population)):
-        tournament_participants = np.random.choice(
-            len(population), size=tournment_size, replace=False)
-        participants_fitnesses = fitnesses[tournament_participants]
-        winner = tournament_participants[np.argmax(participants_fitnesses)]
-        selected_individuals.append(winner)
-    return population[selected_individuals]
-
 
 def crossover_population(population: list[DinoNeuron]):
     new_population = []
@@ -100,7 +90,6 @@ def start():
             print(best_dino.get_params_list())
 
         population = roulette_selection(population, scores)
-        # population = tournment_selection(population, scores)
         population = crossover_population(population)
         mutate_population(population)
 
