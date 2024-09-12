@@ -1,10 +1,10 @@
-dino_count = 200
-num_gens = 50
-crossover_rate = 0.5
-mutation_rate = 0.1
+dino_count = 100
+num_gens = 1000
+crossover_rate = 0.6
+mutation_rate = 0.2
 
-min_weight = -1000
-max_weight = 1000
-min_bias = -0
+min_weight = 0
+max_weight = 100
+min_bias = 0
 max_bias = 0
-num_inputs = 4
+num_inputs = 3

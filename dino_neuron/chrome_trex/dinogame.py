@@ -427,20 +427,20 @@ class MultiDinoGame:
 
         self.counter = (self.counter + 1)
 
-    def get_state(self) -> tuple[list[tuple[float, float, float]], float]:
+    def get_state(self) -> list[tuple[float, float]]:
         w = self.screen.get_width()
         h = self.screen.get_height()
 
         def get_coords(sprites, min_size):
             # cs = [((s.rect.centerx-self.player_dinos[0].rect.centerx)/w, s.rect.centery/h, s.rect.height/h)
-            cs = [(max((s.rect.centerx-self.player_dinos[0].rect.centerx)/w, 0), (h-s.rect.y), s.rect.height/h)
+            cs = [((s.rect.centerx-self.alive_players[0].rect.centerx)/self.gamespeed, (h-s.rect.y))
                   for s in sprites
-                  # if s.rect.centerx > self.player_dinos[0].rect.centerx]
-                  if s.rect.centerx + s.rect.width/2 > self.player_dinos[0].rect.centerx]
-            return cs + [(1, 0, 0)]*(min_size-len(cs))
+                  # if s.rect.centerx > self.alive_players[0].rect.centerx]
+                  if s.rect.centerx + s.rect.width/2 > self.alive_players[0].rect.centerx]
+            return cs + [(float('inf'), 0)]*(min_size-len(cs))
 
         coords = get_coords(self.cacti, 2) + get_coords(self.pteras, 1)
-        return sorted(coords, key=lambda x: x[0]), self.gamespeed/w
+        return sorted(coords, key=lambda x: x[0])
 
     def get_scores(self):
         return [player.score for player in self.player_dinos]

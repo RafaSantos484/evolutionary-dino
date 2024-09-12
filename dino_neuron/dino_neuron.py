@@ -1,6 +1,6 @@
 import numpy as np
 
-from .chrome_trex.dinogame import Dino
+from .chrome_trex.dinogame import HEIGHT, WIDTH, Dino
 from .chrome_trex import ACTION_UP, ACTION_FORWARD, ACTION_DOWN
 from .trainning_params import min_weight, max_weight, min_bias, max_bias, num_inputs
 
@@ -21,13 +21,8 @@ class DinoNeuron:
         if dino.is_dead:
             return ACTION_DOWN
 
-        # print(dino.rect.y)
-        # inputs[1] -= dino.rect.y
-        # print(inputs)
-        # print(dino.rect.centery)
         inputs = np.array(
-            [inputs[0], max(inputs[1]-1.5*dino.rect.height, 0), inputs[2], 1 if dino.is_jumping else 0])
-        # inputs = np.array([inputs[0], max((inputs[1] - 1.5*dino.rect.height), 0), inputs[2]])
+            [inputs[0]/WIDTH, (inputs[1]-dino.rect.height)/HEIGHT, 1 if dino.is_jumping else 0])
         # print(inputs)
         # print()
 

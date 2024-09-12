@@ -70,7 +70,7 @@ def start():
 
     # Create a new game that runs with at most 'fps' frames per second.
     # Use fps=0 for unlimited fps.
-    game = MultiDinoGame(fps=0, dino_count=dino_count)
+    game = MultiDinoGame(fps=120, dino_count=dino_count)
     best_score = 0
     # best_dino = DinoNeuron()
     for _ in range(num_gens):
@@ -78,14 +78,9 @@ def start():
             # Get a list of floats representing the game state
             # (positions of the obstacles and game speed).
             state = game.get_state()
-            coords, speed = state
-            first_obstacle_distance, first_obstacle_y_pos, first_obstacle_height = coords[0]
-            # second_obstacle_distance, second_obstacle_y_pos, second_obstacle_height = coords[1]
-            # next_distance, next_y_pos, _ = coords[1]
+            first_obstacle_time, first_obstacle_y_pos = state[0]
 
-            inputs = np.array(
-                [first_obstacle_distance, first_obstacle_y_pos, speed])
-            # inputs = np.array([first_obstacle_distance, second_obstacle_distance, first_obstacle_y_pos, second_obstacle_y_pos, speed])
+            inputs = np.array([first_obstacle_time, first_obstacle_y_pos])
 
             actions = get_actions(population, inputs, game)
 
