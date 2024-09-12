@@ -84,3 +84,17 @@ Sempre que o código encontrar um indivíduo que bateu o recorde do jogo de trei
 ## Jogando com Melhor Indivíduo
 
 `poetry run play`
+
+# Vídeos de Treinamento
+
+## Início do treinamento
+
+![1726166678898](image/README/1726166678898.gif)
+
+## Decorrer do Treinamento
+
+![1726167087634](image/README/1726167087634.gif)
+
+## Fim do Treinamento
+
+![1726167556180](image/README/1726167556180.gif)

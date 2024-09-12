@@ -1,4 +1,4 @@
-dino_count = 300
+dino_count = 100
 num_gens = 1000
 crossover_rate = 0.6
 mutation_rate = 0.2
