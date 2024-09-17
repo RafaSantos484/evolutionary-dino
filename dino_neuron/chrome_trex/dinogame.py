@@ -4,15 +4,10 @@ import pkgutil
 import io
 import contextlib
 import itertools
-from typing import Literal
 
-'''
 with contextlib.redirect_stdout(None):
     import pygame
     from pygame import *
-'''
-import pygame
-from pygame import *
 
 __author__ = "Shivam Shekhar"
 
@@ -28,8 +23,9 @@ WIDTH, HEIGHT = 600, 150
 
 
 def load_image(name, sizex=-1, sizey=-1, colorkey=None):
-    image = pygame.image.load(io.BytesIO(pkgutil.get_data(
-        'dino_neuron.chrome_trex', f'sprites/{name}')))
+    fullname = os.path.join('sprites', name)
+    image = pygame.image.load(io.BytesIO(
+        pkgutil.get_data('dino_neuron.chrome_trex', fullname)), fullname)
     image = image.convert()
     if colorkey is not None:
         if colorkey == -1:
@@ -43,10 +39,9 @@ def load_image(name, sizex=-1, sizey=-1, colorkey=None):
 
 
 def load_sprite_sheet(sheetname, nx, ny, scalex=-1, scaley=-1, colorkey=None):
-    # fullname = os.path.join('sprites', sheetname)
-    # sheet = pygame.image.load(io.BytesIO(pkgutil.get_data('chrome_trex', fullname)), fullname)
-    sheet = pygame.image.load(io.BytesIO(pkgutil.get_data(
-        'dino_neuron.chrome_trex', f'sprites/{sheetname}')))
+    fullname = os.path.join('sprites', sheetname)
+    sheet = pygame.image.load(io.BytesIO(
+        pkgutil.get_data('dino_neuron.chrome_trex', fullname)), fullname)
     sheet = sheet.convert()
 
     sheet_rect = sheet.get_rect()
@@ -111,8 +106,7 @@ class Dino():
         self.is_blinking = False
         self.movement = [0, 0]
         self.jump_speed = 11.5
-        # self.gravity = 0.6
-        self.gravity = 1.
+        self.gravity = 0.6
 
         self.stand_pos_width = self.rect.width
         self.duck_pos_width = self.rect1.width
@@ -125,16 +119,9 @@ class Dino():
             self.rect.bottom = int(0.98*HEIGHT)
             self.is_jumping = False
 
-    def update(self, action: Literal[0, 1, 2] = ACTION_FORWARD):
+    def update(self):
         if self.is_jumping:
             self.movement[1] = self.movement[1] + self.gravity
-            if action == ACTION_DOWN:
-                # self.movement[1] += self.jump_speed
-                self.movement[1] += self.gravity
-                # print('increased fall')
-            elif action == ACTION_UP:
-                self.movement[1] -= self.gravity / 4
-                # print('delayed fall')
 
         if self.is_jumping:
             self.index = 0
@@ -338,7 +325,6 @@ class MultiDinoGame:
 
     def step(self, actions):
         pygame.event.get()
-
         if pygame.display.get_surface() is None:
             print("Couldn't load display surface")
             self.game_over = True
@@ -347,18 +333,15 @@ class MultiDinoGame:
         for player, action in zip(self.player_dinos, actions):
             if player.is_dead:
                 continue
-
             if action == ACTION_FORWARD:
                 player.is_ducking = False
-            elif action == ACTION_UP:
-                player.is_ducking = False
+            if action == ACTION_UP:
                 if player.rect.bottom == int(0.98*HEIGHT):
                     player.is_jumping = True
                     player.movement[1] = -player.jump_speed
             elif action == ACTION_DOWN:
-                # if not player.is_jumping:
-                #   player.is_ducking = True
-                player.is_ducking = True
+                if not (player.is_jumping and player.is_dead):
+                    player.is_ducking = True
 
         for sprite in itertools.chain(self.cacti, self.pteras):
             sprite.movement[0] = -self.gamespeed
@@ -387,9 +370,8 @@ class MultiDinoGame:
         if len(self.clouds) < 5 and random.randrange(0, 300) == 10:
             Cloud(WIDTH, random.randrange(HEIGHT/5, HEIGHT/2))
 
-        for i, player in enumerate(self.player_dinos):
-            if not player.is_dead and i < len(actions):
-                player.update(actions[i])
+        for player in self.alive_players:
+            player.update()
         self.cacti.update()
         self.pteras.update()
         self.clouds.update()

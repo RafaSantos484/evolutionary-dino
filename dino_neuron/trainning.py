@@ -59,7 +59,7 @@ def start():
 
     # Create a new game that runs with at most 'fps' frames per second.
     # Use fps=0 for unlimited fps.
-    game = MultiDinoGame(fps=120, dino_count=dino_count)
+    game = MultiDinoGame(fps=0, dino_count=dino_count)
     best_score = 0
     best_global_dino = None
     for _ in range(num_gens):

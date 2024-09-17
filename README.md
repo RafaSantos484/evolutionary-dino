@@ -58,17 +58,11 @@ Cada cruzamento irá gerar 2 filhos. Para cada cruzamento é gerado uma máscara
 
 ## Mutação
 
-Para cada indivíduo, tenta-se aplicar uma mutação 3 vezes, uma para cada neurônio de camada 1. A mutação equivale a gerar novos pesos e viés aleatórios ao neurônio.
+Para cada indivíduo, tenta-se aplicar uma mutação 3 vezes, uma para cada neurônio de camada 1. A mutação equivale a gerar novos pesos e viés aleatórios ao neurônio.Notas do Código do chrome-trex-rush
 
-# Notas do Código do chrome-trex-rush
+# Limitações do chrome-trex-rush
 
-## Ações Quando o Dino Está no Ar
-
-No código original, não há nenhuma alteração no movimento do dinossauro quando ele tenta se agachar ou pular estando no ar. Alteramos o código de forma que, se ele se agachar no ar, ele irá cair mais rápido e, se ele tentar pular no ar, ele irá cair mais lentamente. Isso permite que o dino aprenda estratégias como se agachar ao passar de um obstáculo para chegar mais rápido ao chão e poder pular o próximo obstáculo mais rápido.
-
-## Limitações do chrome-trex-rush
-
-A principal limitação encontrada no código do chrome-trex-rush está relacionada à forma que os obstáculos são gerados. Em alguns momentos são gerados cactos e pterodáctilo muito próximos, de forma que é impossível desviar, fazendo com que dinos promissores morressem cedo demais. Além disso, em alguns momentos é gerado apenas cactos por boa parte do percurso, fazendo com que dinos que só sabem desviar do cacto mas não do pterodáctilo ganhem scores muito altos. Estas limitações causaram um atraso o aprendizado dos dinos.
+A principal limitação encontrada no código do chrome-trex-rush está relacionada à forma que os obstáculos são gerados. Em alguns momentos são gerados cactos e pterodáctilos muito próximos, de forma que é impossível desviar, fazendo com que dinos promissores morram cedo demais. Além disso, em alguns momentos é gerado apenas cactos por boa parte do percurso, fazendo com que dinos que só sabem desviar do cacto mas não do pterodáctilo ganhem scores superestimados. Estas limitações causam um atraso no aprendizado dos dinos.
 
 # Executando o Código
 
