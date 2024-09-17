@@ -15,7 +15,6 @@ def roulette_selection(population: list[DinoNeuron], fitnesses: list[float]):
     return population[selected_individuals]
 
 
-
 def crossover_population(population: list[DinoNeuron]):
     new_population = []
     while len(new_population) < len(population):
@@ -62,7 +61,7 @@ def start():
     # Use fps=0 for unlimited fps.
     game = MultiDinoGame(fps=120, dino_count=dino_count)
     best_score = 0
-    # best_dino = DinoNeuron()
+    best_global_dino = None
     for _ in range(num_gens):
         while game.alive_players:
             # Get a list of floats representing the game state
@@ -83,15 +82,18 @@ def start():
         # Get a list with the score of each score of each player.
         scores = np.array(game.get_scores())
         best_score_idx = np.argmax(scores)
+        best_local_dino = population[best_score_idx]
         if scores[best_score_idx] > best_score:
             best_score = scores[best_score_idx]
-            best_dino = population[best_score_idx]
-            best_dino.export_dino()
-            print(best_dino.get_params_list())
+            best_global_dino = best_local_dino
+            best_global_dino.export_dino()
+            print(best_global_dino.get_params_list())
 
         population = roulette_selection(population, scores)
         population = crossover_population(population)
         mutate_population(population)
+        population[0] = best_global_dino
+        population[1] = best_local_dino
 
         # input()
         # Reset the game.

@@ -1,10 +1,23 @@
 # Sobre o Projeto
 
-Este projeto foi feito usando o código do repositório [chrome-trex-rush](https://github.com/turing-usp/chrome-trex-rush). O jogo do dinossauro é replicado nele usando a bilbioteca [Pygame](https://www.pygame.org). O chrome-trex-rush implementa a parte visual do jogo, além de permitir simular o jogo para vários dinossauros. Para cada frame do jogo, é possível obter o seu estado atual (informações sobre obstáculos, velocidade atual do jogo, etc) e deve-se informar uma ação(pular, agachar ou andar) para cada dinossauro para que se possa ir para o próximo frame.
+Este projeto foi feito usando o código do repositório [chrome-trex-rush](https://github.com/turing-usp/chrome-trex-rush). O jogo do dinossauro é replicado nele usando a bilbioteca [Pygame](https://www.pygame.org). O chrome-trex-rush implementa a parte visual do jogo, além de permitir simulá-lo com vários dinos. Para cada frame do jogo, é possível obter o seu estado atual (informações sobre obstáculos, velocidade atual do jogo, etc) e deve-se informar a ação(pular, andar ou agachar) de cada dino para que se possa ir para o próximo frame.
 
-Este projeto implementa um algoritmo genética para aprender o jogo. Cada dinossauro é representado por uma rede neural de 2 camadas. A 1º camada é composta por 3 neurônios referentes às 3 possíveis ações que recebem 3 entradas referentes ao tempo para alcançar(distância dividida pela velocidade do jogo) e posição vertical(posição vertical tendo o chão como referencial subtraida pela altura dinossauro) do próximo obstáculo e o valor numérico referente a estado lógico do dinossauro estar pulando ou não(1 para verdadeiro e 0 para falso). As saídas destes 3 neurônios são a entrada de 4º neurônio que irá selecionar a saída com maior valor e escolher a respectiva ação.
+Este projeto implementa um algoritmo genética. Cada dino é representado por uma rede neural de 2 camadas. A 1º camada é composta por 3 neurônios referentes às 3 possíveis ações que recebem 2 entradas, sendo elas:
 
-![1726152213509](image/README/1726152213509.png)
+* Tempo normalizado para chegar ao próximo obstáculo: distância entre o dino e o próximo obstáculo dividida pelo produto entre o comprimento da tela e a velocidade atual do jogo
+* Distância vertical normalizada: Diferença entre a posição vertical do dino e do próximo obstáculo dividada pela altura da tela
+
+As saídas destes 3 neurônios são a entrada de 4º neurônio que irá selecionar a saída com maior valor e escolher a respectiva ação. As funções de ativação dos neurônios de pular e andar são a sigmoide enquanto a do neurônio de agachar é o degrau binário.
+
+![1726593675909](image/README/1726593675909.png)
+
+![1726594430860](image/README/1726594430860.png)
+
+![1726594437283](image/README/1726594437283.png)
+
+![1726594080018](image/README/1726594080018.png)
+
+Note que a sigmoide sempre irá gerar uma valor entre 0 e 1 e o degrau sempre será 0 ou 1. Pelo fato da função de ativação do neurônio de agachar ser o degrau, esta ação sempre irá possuir prioridade caso seus inputs gerem uma soma não negativa. De forma análoga, caso seus inputs gerem uma soma negativa, este neurônio irá gerar uma saída 0, fazendo com que as outras ações tenham prioridade.
 
 # Parâmetros
 
@@ -13,16 +26,16 @@ Os parâmetros de treinamento podem ser alterados no arquivo `trainning_params.p
 ## Exemplo de Arquivo `trainning_params.py`
 
 ```python
-dino_count = 300
+dino_count = 100
 num_gens = 1000
 crossover_rate = 0.6
 mutation_rate = 0.2
 
-min_weight = 0
+min_weight = -10
 max_weight = 10
 min_bias = -1
 max_bias = 1
-num_inputs = 3
+num_inputs = 2
 ```
 
 # Algoritmo Genético
@@ -72,12 +85,12 @@ Sempre que o código encontrar um indivíduo que bateu o recorde do jogo de trei
 ### Exemplo de Arquivo `dino_params.txt`
 
 ```
-[2.98350607 2.11769848 7.13659417]
--0.39448118138819743
-[6.63418138 2.52645824 0.75304239]
--0.43207310735713267
-[0.83442417 8.40866032 4.36345151]
--0.6679732398869809
+[-7.93148662  1.34297385]
+0.7192595492470872
+[0.89884438 0.64064279]
+0.5173627876963991
+[ 4.98639947 -7.16036658]
+-0.9064276834816818
 
 ```
 

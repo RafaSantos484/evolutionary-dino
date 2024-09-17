@@ -5,6 +5,22 @@ from .chrome_trex import ACTION_UP, ACTION_FORWARD, ACTION_DOWN
 from .trainning_params import min_weight, max_weight, min_bias, max_bias, num_inputs
 
 
+def binary_step(x: float):
+    return 1 if x >= 0 else 0
+
+
+def hyperbolic_tangent(x: float):
+    return np.tanh(x)
+
+
+def retified_linear_unit(x: float):
+    return max(0, x)
+
+
+def logistic_function(x: float):
+    return 1 / (1 + np.exp(-x))
+
+
 class DinoNeuron:
     def __init__(self):
         self.up_neuron_weights = np.random.uniform(
@@ -22,10 +38,9 @@ class DinoNeuron:
             return ACTION_DOWN
 
         # inputs = np.array([inputs[0]/WIDTH, (inputs[1]-(HEIGHT-dino.rect.centery + dino.rect.height/2))/HEIGHT, 1 if dino.is_jumping else 0])
-        inputs = np.array(
-            [inputs[0]/WIDTH, (inputs[1]-dino.rect.height)/HEIGHT, 1 if dino.is_jumping else 0])
+        inputs = np.array([inputs[0], (inputs[1]-dino.rect.centery)/HEIGHT])
         # if dino.score > 100:
-        #   print(inputs)
+        # print(inputs)
         # print()
 
         up_neuron_sum = np.dot(self.up_neuron_weights,
@@ -35,9 +50,13 @@ class DinoNeuron:
         down_neuron_sum = np.dot(
             self.down_neuron_weights, inputs) + self.down_neuron_bias
 
+        up_neuron_output = logistic_function(up_neuron_sum)
+        foward_neuron_output = logistic_function(foward_neuron_sum)
+        down_neuron_output = binary_step(down_neuron_sum)
+
         actions = [ACTION_UP, ACTION_FORWARD, ACTION_DOWN]
         action = actions[np.argmax(
-            [up_neuron_sum, foward_neuron_sum, down_neuron_sum])]
+            [up_neuron_output, foward_neuron_output, down_neuron_output])]
         return action
 
     def get_params_list(self):
