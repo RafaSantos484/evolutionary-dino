@@ -64,6 +64,15 @@ def start():
     best_global_dino = None
     for _ in range(num_gens):
         while game.alive_players:
+            scores = np.array(game.get_scores())
+            best_score_idx = np.argmax(scores)
+            best_local_dino = population[best_score_idx]
+            if scores[best_score_idx] > best_score:
+                best_score = scores[best_score_idx]
+                if best_global_dino != best_local_dino:
+                    best_global_dino = best_local_dino
+                    best_global_dino.export_dino()
+                    print(best_global_dino.get_params_list())
             # Get a list of floats representing the game state
             # (positions of the obstacles and game speed).
             state = game.get_state()

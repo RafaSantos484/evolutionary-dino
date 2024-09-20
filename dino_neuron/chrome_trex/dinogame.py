@@ -279,16 +279,20 @@ class MultiDinoGame:
     def __init__(self, dino_count, fps=60):
         self.high_score = 0
         self.fps = fps
+        self.obstacles = []
         self.dino_count = dino_count
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
         pygame.display.set_caption("T-Rex Rush")
+        # Inicializa a fonte padrão com tamanho 24
+        self.font = pygame.font.Font(None, 24)
         self.reset()
 
     def reset(self):
         self.gamespeed = 4
         self.game_over = False
+        self.obstacles = []
         self.new_ground = Ground(-1*self.gamespeed)
         self.scb = Scoreboard()
         self.highsc = Scoreboard(WIDTH*0.78)
@@ -333,8 +337,7 @@ class MultiDinoGame:
         for player, action in zip(self.player_dinos, actions):
             if player.is_dead:
                 continue
-            if action == ACTION_FORWARD:
-                player.is_ducking = False
+            player.is_ducking = False
             if action == ACTION_UP:
                 if player.rect.bottom == int(0.98*HEIGHT):
                     player.is_jumping = True
@@ -351,24 +354,28 @@ class MultiDinoGame:
                     self.alive_players.remove(player)
                     self.last_dead_player = player
 
-        if len(self.cacti) < 2:
-            if len(self.cacti) == 0:
+        obstaculos = len(self.cacti) + len(self.pteras)
+        # print(obstaculos)
+        MIN_DISTANCE = 200 * self.gamespeed  # Distância mínima entre os obstáculos
+        if obstaculos < 3:
+            if obstaculos == 0:
                 self.last_obstacle.empty()
-                self.last_obstacle.add(Cactus(self.gamespeed, 40, 40))
+                randomvalor = random.randrange(0, 50)
+                if randomvalor > 24:
+                    self.last_obstacle.add(Cactus(self.gamespeed, 40, 40))
+                elif randomvalor <= 24:
+                    self.last_obstacle.add(Ptera(self.gamespeed, 46, 40))
             else:
                 for l in self.last_obstacle:
-                    if l.rect.right < WIDTH*0.7 and random.randrange(0, 50) == 10:
+                    if l.rect.right < WIDTH*0.7 and random.randrange(0, 50) > 24 and l.rect.left < WIDTH - MIN_DISTANCE:
                         self.last_obstacle.empty()
                         self.last_obstacle.add(Cactus(self.gamespeed, 40, 40))
-
-        if len(self.pteras) == 0 and random.randrange(0, 200) == 10 and self.counter > 500:
-            for l in self.last_obstacle:
-                if l.rect.right < WIDTH*0.8:
-                    self.last_obstacle.empty()
-                    self.last_obstacle.add(Ptera(self.gamespeed, 46, 40))
+                    elif l.rect.right < WIDTH*0.7 and random.randrange(0, 50) <= 24 and l.rect.left < WIDTH - MIN_DISTANCE:
+                        self.last_obstacle.empty()
+                        self.last_obstacle.add(Ptera(self.gamespeed, 46, 40))
 
         if len(self.clouds) < 5 and random.randrange(0, 300) == 10:
-            Cloud(WIDTH, random.randrange(HEIGHT/5, HEIGHT/2))
+            Cloud(WIDTH, random.randrange(HEIGHT//5, HEIGHT//2))
 
         for player in self.alive_players:
             player.update()
@@ -394,16 +401,22 @@ class MultiDinoGame:
         if len(self.alive_players) == 0:
             self.last_dead_player.draw()
 
+        # Renderiza o gamespeed
+        gamespeed_text = self.font.render(
+            f'Game Speed: {self.gamespeed}', True, (0, 0, 0))
+        self.screen.blit(gamespeed_text, (10, 10))  # Posição (10, 10) na tela
+
         pygame.display.update()
         self.clock.tick(self.fps)
-
+        if max(self.get_scores()) > 10000:
+            self.game_over = True
         if len(self.alive_players) == 0:
             self.game_over = True
             max_score = max(self.get_scores())
             if max_score > self.high_score:
                 self.high_score = max_score
 
-        if self.counter % 700 == 699:
+        if self.counter % 700 == 699 and self.gamespeed < 16:
             self.new_ground.speed -= 1
             self.gamespeed += 1
 
@@ -415,11 +428,11 @@ class MultiDinoGame:
 
         def get_coords(sprites, min_size):
             # cs = [((s.rect.centerx-self.player_dinos[0].rect.centerx)/w, s.rect.centery/h, s.rect.height/h)
-            cs = [((s.rect.centerx-self.alive_players[0].rect.centerx)/(self.gamespeed * w), (s.rect.centery))
+            cs = [((s.rect.centerx-self.alive_players[0].rect.centerx)/(self.gamespeed * w), (h-s.rect.centery)/h)
                   for s in sprites
                   # if s.rect.centerx > self.alive_players[0].rect.centerx]
                   if s.rect.centerx + s.rect.width/2 + 10 > self.alive_players[0].rect.centerx]
-            return cs + [(float('inf'), 0)]*(min_size-len(cs))
+            return cs + [(1, 0)]*(min_size-len(cs))
 
         coords = get_coords(self.cacti, 2) + get_coords(self.pteras, 1)
         return sorted(coords, key=lambda x: x[0])
@@ -440,3 +453,6 @@ class DinoGame(MultiDinoGame):
 
     def get_score(self):
         return self.get_scores()[0]
+
+    def get_state(self):
+        return super().get_state()[0]

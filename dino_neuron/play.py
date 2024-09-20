@@ -14,7 +14,7 @@ def start():
     game = DinoGame(fps=60)
     while game.alive_players:
         state = game.get_state()
-        first_obstacle_time, first_obstacle_y_pos = state[0]
+        first_obstacle_time, first_obstacle_y_pos = state
         inputs = np.array([first_obstacle_time, first_obstacle_y_pos])
 
         game.step(action=dino_neuron.get_action(inputs, game.player_dinos[0]))

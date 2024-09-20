@@ -38,10 +38,10 @@ class DinoNeuron:
             return ACTION_DOWN
 
         # inputs = np.array([inputs[0]/WIDTH, (inputs[1]-(HEIGHT-dino.rect.centery + dino.rect.height/2))/HEIGHT, 1 if dino.is_jumping else 0])
-        inputs = np.array([inputs[0], (inputs[1]-dino.rect.centery)/HEIGHT])
+        inputs = np.array([inputs[0], inputs[1]])
         # if dino.score > 100:
         # print(inputs)
-        # print()
+        #   print()
 
         up_neuron_sum = np.dot(self.up_neuron_weights,
                                inputs) + self.up_neuron_bias
