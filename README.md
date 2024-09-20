@@ -64,6 +64,8 @@ Para cada indivíduo, tenta-se aplicar uma mutação 3 vezes, uma para cada neur
 
 A principal limitação encontrada no código do chrome-trex-rush está relacionada à forma que os obstáculos são gerados. Em alguns momentos são gerados cactos e pterodáctilos muito próximos, de forma que é impossível desviar, fazendo com que dinos promissores morram cedo demais. Além disso, em alguns momentos é gerado apenas cactos por boa parte do percurso, fazendo com que dinos que só sabem desviar do cacto mas não do pterodáctilo ganhem scores superestimados. Estas limitações causam um atraso no aprendizado dos dinos.
 
+A branch `fix_dinogame_obstacles` possui uma versão alterada do código do chrome-trex-rush que tenta consertar essa limitação. Ela funciona da mesma forma, possuindo mudanças na velocidade, pulo dos dinos e geração de obstáculos do jogo.
+
 # Executando o Código
 
 ## Instalando Dependências
